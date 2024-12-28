@@ -1,0 +1,122 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model accounts {
+  id           Int            @id @default(autoincrement())
+  email        String         @unique
+  password     String
+  status       account_status @default(active)
+  verify_email DateTime?      @db.Timestamp(6)
+  created_at   DateTime       @default(now()) @db.Timestamp(6)
+  updated_at   DateTime       @default(now()) @db.Timestamp(6)
+  users        users[]
+}
+
+model comment_likes {
+  id         Int      @id @default(autoincrement())
+  created_at DateTime @default(now()) @db.Timestamp(6)
+  comment_id Int
+  user_id    Int
+  comments   comments @relation(fields: [comment_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_comment_id")
+  users      users    @relation(fields: [user_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_user_id")
+}
+
+model comments {
+  id            Int             @id @default(autoincrement())
+  content       String
+  created_at    DateTime        @default(now()) @db.Timestamp(6)
+  updated_at    DateTime        @default(now()) @db.Timestamp(6)
+  post_id       Int
+  user_id       Int
+  comment_likes comment_likes[]
+  posts         posts           @relation(fields: [post_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_post_id")
+  users         users           @relation(fields: [user_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_user_id")
+}
+
+model follows {
+  id                               Int   @id(map: "followers_pkey") @default(autoincrement())
+  follower_id                      Int
+  followee_id                      Int
+  users_follows_followee_idTousers users @relation("follows_followee_idTousers", fields: [followee_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_followee_id")
+  users_follows_follower_idTousers users @relation("follows_follower_idTousers", fields: [follower_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_follower_id")
+}
+
+model group_members {
+  id         Int      @id @default(autoincrement())
+  created_at DateTime @default(now()) @db.Timestamp(6)
+  user_id    Int
+  group_id   Int
+  groups     groups   @relation(fields: [group_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_group_id")
+  users      users    @relation(fields: [user_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_user_id")
+}
+
+model groups {
+  id            Int             @id @default(autoincrement())
+  group_name    String          @unique
+  description   String?
+  created_at    DateTime        @default(now()) @db.Timestamp(6)
+  updated_at    DateTime        @default(now()) @db.Timestamp(6)
+  owner_id      Int
+  group_members group_members[]
+  users         users           @relation(fields: [owner_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_owner_id")
+}
+
+model post_likes {
+  id         Int      @id @default(autoincrement())
+  created_at DateTime @default(now()) @db.Timestamp(6)
+  post_id    Int
+  user_id    Int
+  posts      posts    @relation(fields: [post_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_post_id")
+  users      users    @relation(fields: [user_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_user_id")
+}
+
+model posts {
+  id         Int             @id @default(autoincrement())
+  title      String
+  content    String[]
+  visibility post_visibility @default(public)
+  created_at DateTime        @default(now()) @db.Timestamp(6)
+  update_at  DateTime        @default(now()) @db.Timestamp(6)
+  user_id    Int
+  comments   comments[]
+  post_likes post_likes[]
+  users      users           @relation(fields: [user_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_user_id")
+}
+
+model users {
+  id                                 Int             @id @default(autoincrement())
+  username                           String          @unique @db.VarChar(20)
+  profile_picture                    String?
+  bio                                String?
+  created_at                         DateTime        @default(now()) @db.Timestamp(6)
+  updated_at                         DateTime        @default(now()) @db.Timestamp(6)
+  account_id                         Int
+  name                               String
+  comment_likes                      comment_likes[]
+  comments                           comments[]
+  follows_follows_followee_idTousers follows[]       @relation("follows_followee_idTousers")
+  follows_follows_follower_idTousers follows[]       @relation("follows_follower_idTousers")
+  group_members                      group_members[]
+  groups                             groups[]
+  post_likes                         post_likes[]
+  posts                              posts[]
+  accounts                           accounts        @relation(fields: [account_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_account_id")
+}
+
+enum account_status {
+  active
+  suspended
+  banned
+}
+
+enum post_visibility {
+  public
+  friends
+  private
+}
