@@ -1,9 +1,16 @@
 import LoginForm from "@/components/forms/LoginForm";
 import { Separator } from "@/components/ui/separator";
+import { getSession } from "@/lib/actions/account.action";
 import Link from "next/link";
+import { redirect } from "next/navigation";
 import React from "react";
 
-const LoginPage = () => {
+const LoginPage = async () => {
+	const session = await getSession();
+	if (session && session.account) {
+		redirect("/");
+	}
+
 	return (
 		<>
 			<h1 className="title">Login to your Account</h1>

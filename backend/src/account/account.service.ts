@@ -13,7 +13,7 @@ export class AccountService {
 
     return await this.prisma.accounts.create({
       data: {
-        ...account,
+        email: account.email,
         password: hashedPassword,
         users: {
           create: {

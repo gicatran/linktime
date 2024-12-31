@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -13,13 +13,18 @@ import {
 } from "../ui/form";
 import { Lock, Mail } from "lucide-react";
 import { Input } from "../ui/input";
-import { Button } from "../ui/button";
 import { Checkbox } from "../ui/checkbox";
 import { Label } from "../ui/label";
 import Link from "next/link";
 import { loginSchema } from "@/lib/validation";
+import { Button } from "../ui/button";
+import { login } from "@/lib/actions/account.action";
+import { useRouter } from "next/navigation";
 
 const LoginForm = () => {
+	const router = useRouter();
+	const [isSubmitting, setIsSubmitting] = useState(false);
+
 	const form = useForm<z.infer<typeof loginSchema>>({
 		resolver: zodResolver(loginSchema),
 		defaultValues: {
@@ -29,10 +34,29 @@ const LoginForm = () => {
 		},
 	});
 
-	function onSubmit(values: z.infer<typeof loginSchema>) {
-		// Do something with the form values.
-		// ✅ This will be type-safe and validated.
-		console.log(values);
+	async function onSubmit(values: z.infer<typeof loginSchema>) {
+		setIsSubmitting(true);
+
+		try {
+			const res = await login({
+				email: values.email,
+				password: values.password,
+				remember: values.remember,
+			});
+
+			if (res.error) {
+				return form.setError("password", {
+					type: "value",
+					message: res.error.message,
+				});
+			}
+
+			router.push("/");
+		} catch (error) {
+			console.error(error);
+		} finally {
+			setIsSubmitting(false);
+		}
 	}
 
 	return (
@@ -110,8 +134,12 @@ const LoginForm = () => {
 						Forgot Password?
 					</Link>
 				</div>
-				<Button type="submit" className="!mt-5 w-full">
-					Login
+				<Button
+					type="submit"
+					className="!mt-5 w-full"
+					disabled={isSubmitting}
+				>
+					{isSubmitting ? "Loading..." : "Login"}
 				</Button>
 			</form>
 		</Form>

@@ -1,5 +1,17 @@
 import { z } from "zod";
 
+export type RegisterFormState =
+	| {
+			error?: {
+				name?: string[];
+				email?: string[];
+				password?: string[];
+				confirmPassword?: string[];
+			};
+			message?: string;
+	  }
+	| undefined;
+
 export const registerSchema = z
 	.object({
 		name: z
@@ -24,6 +36,6 @@ export const registerSchema = z
 
 export const loginSchema = z.object({
 	email: z.string().email({ message: "Invalid email address." }),
-	password: z.string(),
-	remember: z.boolean().default(false),
+	password: z.string().min(1, { message: "Password is required." }),
+	remember: z.boolean(),
 });

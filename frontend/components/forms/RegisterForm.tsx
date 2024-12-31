@@ -10,12 +10,18 @@ import {
 	FormItem,
 	FormMessage,
 } from "../ui/form";
-import { Button } from "../ui/button";
 import { Input } from "../ui/input";
 import { UserRound, Mail, Lock } from "lucide-react";
 import { registerSchema } from "@/lib/validation";
+import { register } from "@/lib/actions/account.action";
+import { Button } from "../ui/button";
+import { useState } from "react";
+import { useRouter } from "next/navigation";
 
 const RegisterForm = () => {
+	const router = useRouter();
+	const [isSubmitting, setIsSubmitting] = useState(false);
+
 	const form = useForm<z.infer<typeof registerSchema>>({
 		resolver: zodResolver(registerSchema),
 		defaultValues: {
@@ -26,10 +32,30 @@ const RegisterForm = () => {
 		},
 	});
 
-	function onSubmit(values: z.infer<typeof registerSchema>) {
-		// Do something with the form values.
-		// ✅ This will be type-safe and validated.
-		console.log(values);
+	async function onSubmit(values: z.infer<typeof registerSchema>) {
+		setIsSubmitting(true);
+
+		try {
+			const res = await register({
+				name: values.name,
+				email: values.email,
+				password: values.password,
+				confirmPassword: values.confirmPassword,
+			});
+
+			if (res.error) {
+				return form.setError("confirmPassword", {
+					type: "value",
+					message: res.error.message,
+				});
+			}
+
+			router.push("/auth/login");
+		} catch (error) {
+			console.error(error);
+		} finally {
+			setIsSubmitting(false);
+		}
 	}
 
 	return (
@@ -117,7 +143,11 @@ const RegisterForm = () => {
 						</FormItem>
 					)}
 				/>
-				<Button type="submit" className="!mt-5 w-full">
+				<Button
+					type="submit"
+					className="!mt-5 w-full"
+					disabled={isSubmitting}
+				>
 					Register
 				</Button>
 			</form>
