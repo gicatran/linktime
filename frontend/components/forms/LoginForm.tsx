@@ -72,14 +72,11 @@ const LoginForm = () => {
 					render={({ field }) => (
 						<FormItem>
 							<FormControl>
-								<div className="flex items-center px-3 py-2 gap-2 border border-input rounded-md">
-									<Mail className="text-gray-500" />
-									<Input
-										placeholder="Email"
-										{...field}
-										className="!border-none !p-0 !h-fit !shadow-none focus-visible:ring-0 rounded-none"
-									/>
-								</div>
+								<Input
+									placeholder="Email"
+									{...field}
+									Icon={Mail}
+								/>
 							</FormControl>
 							<FormMessage />
 						</FormItem>
@@ -91,15 +88,12 @@ const LoginForm = () => {
 					render={({ field }) => (
 						<FormItem>
 							<FormControl>
-								<div className="flex items-center px-3 py-2 gap-2 border border-input rounded-md">
-									<Lock className="text-gray-500" />
-									<Input
-										placeholder="Password"
-										type="password"
-										{...field}
-										className="!border-none !p-0 !h-fit !shadow-none focus-visible:ring-0 rounded-none"
-									/>
-								</div>
+								<Input
+									placeholder="Password"
+									type="password"
+									{...field}
+									Icon={Lock}
+								/>
 							</FormControl>
 							<FormMessage />
 						</FormItem>

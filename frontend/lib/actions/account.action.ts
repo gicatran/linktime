@@ -10,14 +10,15 @@ import {
 } from "./shared.types";
 import { jwtVerify, SignJWT } from "jose";
 import { redirect } from "next/navigation";
+import { revalidatePath } from "next/cache";
 
 export async function register(params: RegisterParams): Promise<FormState> {
 	try {
 		const validationFields = registerSchema.safeParse({
 			name: params.name,
+			username: params.username,
 			email: params.email,
 			password: params.password,
-			confirmPassword: params.confirmPassword,
 		});
 
 		if (!validationFields.success) {
@@ -107,6 +108,17 @@ export async function login(params: LoginParams): Promise<FormState> {
 		return {
 			success: true,
 		};
+	} catch (error) {
+		console.error(error);
+		throw error;
+	}
+}
+
+export async function logout() {
+	try {
+		await deleteSession();
+		revalidatePath("/");
+		redirect("/");
 	} catch (error) {
 		console.error(error);
 		throw error;

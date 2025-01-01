@@ -1,6 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
-import authBg from "@/public/assets/images/auth_bg.png";
+import authBg from "@/public/assets/images/logo_icon.png";
 
 const Logo = () => {
 	return (

@@ -13,15 +13,20 @@ export class AuthService {
   constructor(private readonly accountService: AccountService) {}
 
   async registerAccount(createAccountDto: CreateAccountDto) {
-    const account = await this.accountService.findByEmail(
+    const accountByUsername = await this.accountService.findByEmailOrUsername(
+      createAccountDto.username,
       createAccountDto.email,
     );
-    if (account) throw new ConflictException('Account already exists!');
+    if (accountByUsername)
+      throw new ConflictException(
+        'An account with this username or email is already exists!',
+      );
+
     return this.accountService.create(createAccountDto);
   }
 
   async validateLocalAccount(email: string, password: string) {
-    const account = await this.accountService.findByEmail(email);
+    const account = await this.accountService.findByEmailOrUsername(email);
     if (!account) throw new UnauthorizedException("Account doesn't exist!");
     const isPasswordMatched = await verify(account.password, password);
     if (!isPasswordMatched)
