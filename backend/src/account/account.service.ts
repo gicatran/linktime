@@ -13,11 +13,11 @@ export class AccountService {
 
     return await this.prisma.accounts.create({
       data: {
-        ...account,
+        email: account.email,
         password: hashedPassword,
         users: {
           create: {
-            username: account.email.split('@')[0],
+            username: account.username,
             name: account.name,
           },
         },
@@ -25,9 +25,20 @@ export class AccountService {
     });
   }
 
-  async findByEmail(email: string) {
-    return await this.prisma.accounts.findUnique({
-      where: { email },
+  async findByEmailOrUsername(email?: string, username?: string) {
+    return await this.prisma.accounts.findFirst({
+      where: {
+        OR: [
+          { email },
+          {
+            users: {
+              some: {
+                username: { equals: username },
+              },
+            },
+          },
+        ],
+      },
     });
   }
 }

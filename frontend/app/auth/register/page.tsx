@@ -1,8 +1,15 @@
 import RegisterForm from "@/components/forms/RegisterForm";
 import { Separator } from "@/components/ui/separator";
+import { getSession } from "@/lib/actions/account.action";
 import Link from "next/link";
+import { redirect } from "next/navigation";
 
-const RegisterPage = () => {
+const RegisterPage = async () => {
+	const session = await getSession();
+	if (session && session.account) {
+		redirect("/");
+	}
+
 	return (
 		<>
 			<h1 className="title">Create an Account</h1>
