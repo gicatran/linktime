@@ -20,7 +20,6 @@ _If your PR includes UI changes, please utilize this checklist:_
 
 -   [ ] Semantic HTML implemented?
 -   [ ] Keyboard operability supported?
--   [ ] Checked with [axe DevTools](https://www.deque.com/axe/) and addressed `Critical` and `Serious` issues?
 -   [ ] Color contrast tested?
 
 ## Added/updated tests?
