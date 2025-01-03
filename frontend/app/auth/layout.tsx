@@ -8,7 +8,7 @@ const AuthLayout = ({ children }: PropsWithChildren) => {
 		<div className="flex h-screen">
 			<div className="w-1/2 flex justify-center items-center">
 				<div className="flex flex-col items-center">
-					<Logo />
+					<Logo className="h-20" />
 					{children}
 				</div>
 			</div>

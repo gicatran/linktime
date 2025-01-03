@@ -96,14 +96,16 @@ export async function login(params: LoginParams): Promise<FormState> {
 			};
 		}
 
-		const result = await response.json();
+		if (params.remember) {
+			const result = await response.json();
 
-		await createSession({
-			account: {
-				id: result.id,
-				email: result.email,
-			},
-		});
+			await createSession({
+				account: {
+					id: result.id,
+					email: result.email,
+				},
+			});
+		}
 
 		return {
 			success: true,
