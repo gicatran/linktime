@@ -18,7 +18,6 @@ const Logo = ({
 			<Image
 				src={type === "icon" ? logoIcon : logoText}
 				alt="logo"
-				height={100}
 				className={`object-contain flex justify-center items-center ${className}`}
 			/>
 		</Link>

@@ -41,4 +41,12 @@ export class AccountService {
       },
     });
   }
+
+  async findOne(id: number) {
+    return await this.prisma.accounts.findUnique({
+      where: {
+        id,
+      },
+    });
+  }
 }
