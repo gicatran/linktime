@@ -121,8 +121,19 @@ export async function login(params: LoginParams): Promise<FormState> {
 
 export async function logout() {
 	try {
-		await deleteSession();
-		revalidatePath("/");
+		const response = await authFetch(
+			`${process.env.NEXT_PUBLIC_BACKEND_URL}/auth/logout`,
+			{
+				method: "POST",
+			}
+		);
+
+		if (response.ok) {
+			await deleteSession();
+		}
+
+		revalidatePath("/", "layout");
+		revalidatePath("/", "page");
 		redirect("/");
 	} catch (error) {
 		console.error(error);
