@@ -1,12 +1,11 @@
-import LoginForm from "@/components/forms/LoginForm";
-import OAuthButton from "@/components/shared/OAuthButton";
+import ForgotPasswordForm from "@/components/forms/ForgotPasswordForm";
 import { Separator } from "@/components/ui/separator";
 import { getSession } from "@/lib/actions/session.action";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import React from "react";
 
-const LoginPage = async () => {
+const ForgotPasswordPage = async () => {
 	const session = await getSession();
 	if (session && session.account) {
 		redirect("/");
@@ -14,19 +13,22 @@ const LoginPage = async () => {
 
 	return (
 		<>
-			<h1 className="title">Login to your account</h1>
+			<h1 className="title">Forgot your password?</h1>
 			<p className="subtitle">
-				Welcome back! Select method to login and get back right away!
+				Don&apos;t worry! Enter your email and we will send you a reset
+				code!
 			</p>
-			<div className="flex justify-evenly items-center w-full mt-3">
-				<OAuthButton method="google" />
-				<OAuthButton method="facebook" />
-			</div>
 			<Separator className="my-6" />
-			<LoginForm />
+			<ForgotPasswordForm />
 			<Separator className="my-6" />
 			<p className="text-center">
-				Don&apos;t have an account?{" "}
+				<Link
+					href={"/auth/login"}
+					className="text-blue-500 font-semibold"
+				>
+					Login
+				</Link>
+				{" | "}
 				<Link
 					href={"/auth/register"}
 					className="text-blue-500 font-semibold"
@@ -38,4 +40,4 @@ const LoginPage = async () => {
 	);
 };
 
-export default LoginPage;
+export default ForgotPasswordPage;

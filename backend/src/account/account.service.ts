@@ -50,6 +50,14 @@ export class AccountService {
     });
   }
 
+  async findWithResetCode(resetCode: string) {
+    return await this.prisma.accounts.findFirst({
+      where: {
+        password_reset_token: resetCode,
+      },
+    });
+  }
+
   async updateHashedRefreshToken(
     accountId: number,
     hashedRefreshToken: string | null,
@@ -60,6 +68,33 @@ export class AccountService {
       },
       data: {
         hashed_refresh_token: hashedRefreshToken,
+      },
+    });
+  }
+
+  async updatePasswordResetToken(
+    accountId: number,
+    passwordResetToken: string,
+  ) {
+    return await this.prisma.accounts.update({
+      where: {
+        id: accountId,
+      },
+      data: {
+        password_reset_token: passwordResetToken,
+      },
+    });
+  }
+
+  async updatePassword(id: number, password: string) {
+    const hashedPassword = await hash(password);
+    return await this.prisma.accounts.update({
+      where: {
+        id,
+      },
+      data: {
+        password: hashedPassword,
+        password_reset_token: null,
       },
     });
   }
