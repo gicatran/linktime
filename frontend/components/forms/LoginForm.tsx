@@ -13,8 +13,6 @@ import {
 } from "../ui/form";
 import { Lock, Mail } from "lucide-react";
 import { Input } from "../ui/input";
-import { Checkbox } from "../ui/checkbox";
-import { Label } from "../ui/label";
 import Link from "next/link";
 import { loginSchema } from "@/lib/validation";
 import { Button } from "../ui/button";
@@ -30,7 +28,6 @@ const LoginForm = () => {
 		defaultValues: {
 			email: "",
 			password: "",
-			remember: false,
 		},
 	});
 
@@ -41,7 +38,6 @@ const LoginForm = () => {
 			const res = await login({
 				email: values.email,
 				password: values.password,
-				remember: values.remember,
 			});
 
 			if (res.error) {
@@ -99,28 +95,7 @@ const LoginForm = () => {
 						</FormItem>
 					)}
 				/>
-				<div className="flex justify-between items-center">
-					<FormField
-						control={form.control}
-						name="remember"
-						render={({ field }) => (
-							<FormItem>
-								<FormControl>
-									<div className="flex items-center gap-2">
-										<Checkbox
-											id="remember"
-											checked={field.value}
-											onCheckedChange={field.onChange}
-										/>
-										<Label htmlFor="remember">
-											Remember me
-										</Label>
-									</div>
-								</FormControl>
-								<FormMessage />
-							</FormItem>
-						)}
-					/>
+				<div className="w-full flex justify-end items-center">
 					<Link
 						href={"/auth/forgot-password"}
 						className="text-blue-500 font-semibold"
@@ -130,7 +105,7 @@ const LoginForm = () => {
 				</div>
 				<Button
 					type="submit"
-					className="!mt-5 w-full"
+					className="w-full"
 					disabled={isSubmitting}
 				>
 					{isSubmitting ? "Loading..." : "Login"}

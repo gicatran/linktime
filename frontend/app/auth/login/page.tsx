@@ -1,6 +1,7 @@
 import LoginForm from "@/components/forms/LoginForm";
+import OAuthButton from "@/components/shared/OAuthButton";
 import { Separator } from "@/components/ui/separator";
-import { getSession } from "@/lib/actions/account.action";
+import { getSession } from "@/lib/actions/session.action";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import React from "react";
@@ -17,10 +18,14 @@ const LoginPage = async () => {
 			<p className="subtitle">
 				Welcome back! Select method to login and get back right away!
 			</p>
-			{/* OAuth Login */}
+			<div className="flex justify-evenly items-center w-full mt-3">
+				<OAuthButton method="google" />
+				<OAuthButton method="facebook" />
+			</div>
 			<Separator className="my-6" />
 			<LoginForm />
-			<p className="my-5">
+			<Separator className="my-6" />
+			<p className="text-center">
 				Don&apos;t have an account?{" "}
 				<Link
 					href={"/auth/register"}
