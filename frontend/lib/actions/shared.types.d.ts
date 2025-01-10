@@ -13,7 +13,6 @@ export interface RegisterParams {
 export interface LoginParams {
 	email: string;
 	password: string;
-	remember: boolean;
 }
 
 export type Session = {
@@ -21,6 +20,10 @@ export type Session = {
 		id: string;
 		email: string;
 	};
-	// accessToken: string;
-	// refreshToken: string;
+	accessToken: string;
+	refreshToken: string;
 };
+
+export interface FetchOptions extends RequestInit {
+	headers?: Record<string, string>;
+}

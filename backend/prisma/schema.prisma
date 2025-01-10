@@ -8,14 +8,16 @@ datasource db {
 }
 
 model accounts {
-  id           Int            @id @default(autoincrement())
-  email        String         @unique
-  password     String
-  status       account_status @default(active)
-  verify_email DateTime?      @db.Timestamp(6)
-  created_at   DateTime       @default(now()) @db.Timestamp(6)
-  updated_at   DateTime       @default(now()) @db.Timestamp(6)
-  users        users[]
+  id                   Int            @id @default(autoincrement())
+  email                String         @unique
+  password             String
+  status               account_status @default(active)
+  verify_email         DateTime?      @db.Timestamp(6)
+  created_at           DateTime       @default(now()) @db.Timestamp(6)
+  updated_at           DateTime       @default(now()) @db.Timestamp(6)
+  hashed_refresh_token String?
+  role                 role?          @default(user)
+  users                users?
 }
 
 model comment_likes {
@@ -96,7 +98,7 @@ model users {
   bio                                String?
   created_at                         DateTime        @default(now()) @db.Timestamp(6)
   updated_at                         DateTime        @default(now()) @db.Timestamp(6)
-  account_id                         Int
+  account_id                         Int             @unique
   name                               String
   comment_likes                      comment_likes[]
   comments                           comments[]
@@ -119,4 +121,9 @@ enum post_visibility {
   public
   friends
   private
+}
+
+enum role {
+  admin
+  user
 }

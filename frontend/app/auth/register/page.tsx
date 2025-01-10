@@ -1,6 +1,7 @@
 import RegisterForm from "@/components/forms/RegisterForm";
+import OAuthButton from "@/components/shared/OAuthButton";
 import { Separator } from "@/components/ui/separator";
-import { getSession } from "@/lib/actions/account.action";
+import { getSession } from "@/lib/actions/session.action";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 
@@ -16,7 +17,10 @@ const RegisterPage = async () => {
 			<p className="subtitle">
 				First time around? Select method to register and start explore!
 			</p>
-			{/* OAuth Login */}
+			<div className="flex justify-evenly items-center w-full mt-3">
+				<OAuthButton method="google" />
+				<OAuthButton method="facebook" />
+			</div>
 			<Separator className="my-6" />
 			<RegisterForm />
 			<p className="my-5">

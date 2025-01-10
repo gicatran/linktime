@@ -1,16 +1,20 @@
 "use server";
 
-import { cookies } from "next/headers";
 import { loginSchema, registerSchema } from "../validation";
 import {
+	FetchOptions,
 	FormState,
 	LoginParams,
 	RegisterParams,
-	Session,
 } from "./shared.types";
-import { jwtVerify, SignJWT } from "jose";
 import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
+import {
+	createSession,
+	deleteSession,
+	getSession,
+	refreshToken,
+} from "./session.action";
 
 export async function register(params: RegisterParams): Promise<FormState> {
 	try {
@@ -64,7 +68,6 @@ export async function login(params: LoginParams): Promise<FormState> {
 		const validationFields = loginSchema.safeParse({
 			email: params.email,
 			password: params.password,
-			remember: params.remember,
 		});
 
 		if (!validationFields.success) {
@@ -103,6 +106,8 @@ export async function login(params: LoginParams): Promise<FormState> {
 				id: result.id,
 				email: result.email,
 			},
+			accessToken: result.accessToken,
+			refreshToken: result.refreshToken,
 		});
 
 		return {
@@ -116,8 +121,19 @@ export async function login(params: LoginParams): Promise<FormState> {
 
 export async function logout() {
 	try {
-		await deleteSession();
-		revalidatePath("/");
+		const response = await authFetch(
+			`${process.env.NEXT_PUBLIC_BACKEND_URL}/auth/logout`,
+			{
+				method: "POST",
+			}
+		);
+
+		if (response.ok) {
+			await deleteSession();
+		}
+
+		revalidatePath("/", "layout");
+		revalidatePath("/", "page");
 		redirect("/");
 	} catch (error) {
 		console.error(error);
@@ -125,58 +141,26 @@ export async function logout() {
 	}
 }
 
-export async function createSession(params: Session) {
-	try {
-		const expiredAt = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000);
-		const encodedKey = new TextEncoder().encode(
-			process.env.SESSION_SECRET_KEY
-		);
+export async function authFetch(url: string | URL, options: FetchOptions = {}) {
+	const session = await getSession();
 
-		const session = await new SignJWT(params)
-			.setProtectedHeader({ alg: "HS256" })
-			.setIssuedAt()
-			.setExpirationTime(expiredAt)
-			.sign(encodedKey);
+	options.headers = {
+		...options.headers,
+		Authorization: `Bearer ${session?.accessToken}`,
+	};
 
-		(await cookies()).set("session", session, {
-			httpOnly: true,
-			secure: true,
-			expires: expiredAt,
-			sameSite: "strict",
-			path: "/",
-		});
-	} catch (error) {
-		console.error(error);
-		throw error;
-	}
-}
+	let response = await fetch(url, options);
 
-export async function getSession() {
-	try {
-		const cookie = (await cookies()).get("session")?.value;
-		const encodedKey = new TextEncoder().encode(
-			process.env.SESSION_SECRET_KEY
-		);
+	if (response.status === 401) {
+		if (!session?.refreshToken) throw new Error("Refresh token not found!");
 
-		if (!cookie) {
-			return null;
+		const newAccessToken = await refreshToken(session.refreshToken);
+
+		if (newAccessToken) {
+			options.headers.Authorization = `Bearer ${newAccessToken}`;
+			response = await fetch(url, options);
 		}
-
-		const { payload } = await jwtVerify(cookie, encodedKey, {
-			algorithms: ["HS256"],
-		});
-
-		if (!payload) {
-			return redirect("/auth/login");
-		}
-
-		return payload as Session;
-	} catch (error) {
-		console.error(error);
-		throw error;
 	}
-}
 
-export async function deleteSession() {
-	(await cookies()).delete("session");
+	return response;
 }

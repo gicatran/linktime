@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { getSession } from "./lib/actions/account.action";
+import { getSession } from "./lib/actions/session.action";
 
 export default async function middleware(req: NextRequest) {
 	const session = await getSession();
@@ -12,5 +12,5 @@ export default async function middleware(req: NextRequest) {
 }
 
 export const config = {
-	matcher: ["/"],
+	matcher: ["/", "/profile"],
 };

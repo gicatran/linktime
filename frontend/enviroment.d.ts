@@ -3,6 +3,8 @@ declare global {
 		interface ProcessEnv {
 			NODE_ENV: "development" | "production";
 			NEXT_PUBLIC_BACKEND_URL: string;
+			NEXT_PUBLIC_FRONTEND_URL: string;
+			NEXT_PUBLIC_AVATAR_API: string;
 			SESSION_SECRET_KEY: string;
 		}
 	}
