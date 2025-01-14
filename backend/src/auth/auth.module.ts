@@ -16,6 +16,8 @@ import { APP_GUARD } from '@nestjs/core';
 import { JwtAuthGuard } from './guards/jwt-auth/jwt-auth.guard';
 import { RolesGuard } from './guards/roles/roles.guard';
 import { UserService } from 'src/user/user.service';
+import { MailsService } from 'src/mails/mails.service';
+import { MailerService } from 'src/mailer/mailer.service';
 
 @Module({
   imports: [
@@ -29,6 +31,8 @@ import { UserService } from 'src/user/user.service';
     AuthService,
     AccountService,
     UserService,
+    MailsService,
+    MailerService,
     PrismaService,
     LocalStrategy,
     JwtStrategy,

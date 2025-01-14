@@ -2,7 +2,6 @@ import {
   ConflictException,
   Inject,
   Injectable,
-  Logger,
   UnauthorizedException,
 } from '@nestjs/common';
 import { CreateAccountDto } from '../account/dto/create-account.dto';
@@ -13,6 +12,12 @@ import { JwtService } from '@nestjs/jwt';
 import refreshConfig from './config/refresh.config';
 import { ConfigType } from '@nestjs/config';
 import { UserService } from 'src/user/user.service';
+import { MailsService } from 'src/mails/mails.service';
+import {
+  ForgotPasswordAccountDto,
+  ForgotPasswordCodeDto,
+} from 'src/account/dto/read-account.dto';
+import { ResetPasswordDto } from 'src/account/dto/update-account.dto';
 
 @Injectable()
 export class AuthService {
@@ -20,6 +25,7 @@ export class AuthService {
     private readonly accountService: AccountService,
     private readonly userService: UserService,
     private readonly jwtService: JwtService,
+    private readonly mailsService: MailsService,
     @Inject(refreshConfig.KEY)
     private refreshTokenConfig: ConfigType<typeof refreshConfig>,
   ) {}
@@ -54,6 +60,49 @@ export class AuthService {
 
   async logout(accountId: number) {
     return await this.accountService.updateHashedRefreshToken(accountId, null);
+  }
+
+  async forgotPassword(forgotPasswordAccountDto: ForgotPasswordAccountDto) {
+    const account = await this.accountService.findByEmailOrUsername(
+      forgotPasswordAccountDto.email,
+    );
+    if (!account) throw new UnauthorizedException("Account doesn't exist!");
+    const resetToken = Math.floor(100000 + Math.random() * 900000).toString();
+    return await this.mailsService.forgotPassword({
+      to: forgotPasswordAccountDto.email,
+      data: {
+        token: resetToken,
+        accountId: account.id,
+        email: account.email,
+      },
+    });
+  }
+
+  async forgotPasswordCode(forgotPasswordCodeDto: ForgotPasswordCodeDto) {
+    const account = await this.accountService.findByEmailOrUsername(
+      forgotPasswordCodeDto.email,
+    );
+    if (!account) throw new UnauthorizedException("Account doesn't exist!");
+    const isTokenMatched = await verify(
+      account.password_reset_token,
+      forgotPasswordCodeDto.code,
+    );
+    if (!isTokenMatched) throw new UnauthorizedException('Invalid code!');
+    return {
+      id: account.id,
+      email: account.email,
+    };
+  }
+
+  async resetPassword(resetPasswordDto: ResetPasswordDto) {
+    const account = await this.accountService.findByEmailOrUsername(
+      resetPasswordDto.email,
+    );
+    if (!account) throw new UnauthorizedException("Account doesn't exist!");
+    return this.accountService.updatePassword(
+      account.id,
+      resetPasswordDto.password,
+    );
   }
 
   async generateToken(accountId: number) {
@@ -112,7 +161,6 @@ export class AuthService {
       account.hashed_refresh_token,
       refreshToken,
     );
-    Logger.log('Refresh Token Matched: ' + refreshTokenMatched);
     if (!refreshTokenMatched)
       throw new UnauthorizedException('Invalid Refresh Token!');
     const currentAccount = { id: account.id, role: account.role };

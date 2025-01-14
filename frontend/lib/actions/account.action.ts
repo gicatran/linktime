@@ -1,6 +1,12 @@
 "use server";
 
-import { loginSchema, registerSchema } from "../validation";
+import {
+	forgotPasswordCodeSchema,
+	forgotPasswordSchema,
+	loginSchema,
+	registerSchema,
+	resetPasswordSchema,
+} from "../validation";
 import {
 	FetchOptions,
 	FormState,
@@ -15,6 +21,7 @@ import {
 	getSession,
 	refreshToken,
 } from "./session.action";
+import { cookies } from "next/headers";
 
 export async function register(params: RegisterParams): Promise<FormState> {
 	try {
@@ -135,6 +142,141 @@ export async function logout() {
 		revalidatePath("/", "layout");
 		revalidatePath("/", "page");
 		redirect("/");
+	} catch (error) {
+		console.error(error);
+		throw error;
+	}
+}
+
+export async function forgotPassword(email: string): Promise<FormState> {
+	try {
+		const validationFields = forgotPasswordSchema.safeParse({
+			email,
+		});
+
+		if (!validationFields.success) {
+			return {
+				success: false,
+				error: Error(validationFields.error.errors[0].message),
+			};
+		}
+
+		const response = await fetch(
+			`${process.env.NEXT_PUBLIC_BACKEND_URL}/auth/forgot-password`,
+			{
+				method: "POST",
+				headers: {
+					"content-type": "application/json",
+				},
+				body: JSON.stringify(validationFields.data),
+			}
+		);
+
+		if (!response.ok) {
+			return {
+				success: false,
+				error: Error(response.statusText),
+			};
+		}
+
+		(await cookies()).set("resetPassword_email", email);
+
+		return {
+			success: true,
+		};
+	} catch (error) {
+		console.error(error);
+		throw error;
+	}
+}
+
+export async function forgotPasswordCode(
+	email: string,
+	code: string
+): Promise<FormState> {
+	try {
+		const validationFields = forgotPasswordCodeSchema.safeParse({
+			email,
+			code,
+		});
+
+		if (!validationFields.success) {
+			return {
+				success: false,
+				error: Error(validationFields.error.errors[0].message),
+			};
+		}
+
+		const response = await fetch(
+			`${process.env.NEXT_PUBLIC_BACKEND_URL}/auth/forgot-password/code`,
+			{
+				method: "POST",
+				headers: {
+					"content-type": "application/json",
+				},
+				body: JSON.stringify(validationFields.data),
+			}
+		);
+
+		if (!response.ok) {
+			return {
+				success: false,
+				error: Error(response.statusText),
+			};
+		}
+
+		(await cookies()).set("resetPassword_code", code);
+
+		return {
+			success: true,
+		};
+	} catch (error) {
+		console.error(error);
+		throw error;
+	}
+}
+
+export async function resetPassword(
+	email: string,
+	password: string
+): Promise<FormState> {
+	try {
+		const validationFields = resetPasswordSchema.safeParse({
+			email,
+			password,
+		});
+
+		if (!validationFields.success) {
+			return {
+				success: false,
+				error: Error(validationFields.error.errors[0].message),
+			};
+		}
+
+		const response = await fetch(
+			`${process.env.NEXT_PUBLIC_BACKEND_URL}/auth/forgot-password/reset`,
+			{
+				method: "POST",
+				headers: {
+					"content-type": "application/json",
+				},
+				body: JSON.stringify(validationFields.data),
+			}
+		);
+
+		if (!response.ok) {
+			return {
+				success: false,
+				error: Error(response.statusText),
+			};
+		}
+
+		(await cookies()).delete("resetPassword_email");
+		(await cookies()).delete("resetPassword_code");
+
+		return {
+			success: true,
+		};
 	} catch (error) {
 		console.error(error);
 		throw error;

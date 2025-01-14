@@ -13,7 +13,7 @@ const RegisterPage = async () => {
 
 	return (
 		<>
-			<h1 className="title">Create an Account</h1>
+			<h1 className="title">Create an account</h1>
 			<p className="subtitle">
 				First time around? Select method to register and start explore!
 			</p>

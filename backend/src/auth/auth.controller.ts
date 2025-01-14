@@ -2,6 +2,7 @@ import {
   Body,
   Controller,
   Get,
+  Logger,
   Post,
   Req,
   Request,
@@ -16,6 +17,11 @@ import { GoogleAuthGuard } from './guards/google-auth/google-auth.guard';
 import { Response } from 'express';
 import { Public } from './decorators/public.decorator';
 import { Roles } from './decorators/roles.decorator';
+import {
+  ForgotPasswordAccountDto,
+  ForgotPasswordCodeDto,
+} from 'src/account/dto/read-account.dto';
+import { ResetPasswordDto } from 'src/account/dto/update-account.dto';
 
 @Controller('auth')
 export class AuthController {
@@ -37,6 +43,24 @@ export class AuthController {
   @Post('logout')
   logout(@Req() req) {
     return this.authService.logout(req.user.id);
+  }
+
+  @Public()
+  @Post('forgot-password')
+  forgotPassword(@Body() forgotPasswordAccountDto: ForgotPasswordAccountDto) {
+    return this.authService.forgotPassword(forgotPasswordAccountDto);
+  }
+
+  @Public()
+  @Post('forgot-password/code')
+  forgotPasswordCode(@Body() forgotPasswordCodeDto: ForgotPasswordCodeDto) {
+    return this.authService.forgotPasswordCode(forgotPasswordCodeDto);
+  }
+
+  @Public()
+  @Post('forgot-password/reset')
+  resetPassword(@Body() resetPasswordDto: ResetPasswordDto) {
+    return this.authService.resetPassword(resetPasswordDto);
   }
 
   @Public()
