@@ -17,6 +17,7 @@ import { logout } from "@/lib/actions/account.action";
 import { navLinks } from "@/constants";
 import GlobalSearch from "../search/GlobalSearch";
 import { Separator } from "@/components/ui/separator";
+import ThemeSwitcher from "./ThemeSwitcher";
 
 const Navbar = async () => {
 	const user = await getProfile();
@@ -39,9 +40,10 @@ const Navbar = async () => {
 					);
 				})}
 			</div>
-			<div className="flex items-center gap-3 h-full">
+			<div className="flex items-center gap-3 h-full py-3">
 				<GlobalSearch />
 				<Separator orientation="vertical" />
+				<ThemeSwitcher />
 				<DropdownMenu>
 					<DropdownMenuTrigger>
 						<div className="flex items-center p-1">

@@ -14,8 +14,10 @@ const LoginPage = async () => {
 
 	return (
 		<>
-			<h1 className="title">Login to your account</h1>
-			<p className="subtitle">
+			<h1 className="h1-bold text-dark100_light900">
+				Login to your account
+			</h1>
+			<p className="base-medium text-dark500_light500">
 				Welcome back! Select method to login and get back right away!
 			</p>
 			<div className="flex justify-evenly items-center w-full mt-3">
@@ -25,11 +27,11 @@ const LoginPage = async () => {
 			<Separator className="my-6" />
 			<LoginForm />
 			<Separator className="my-6" />
-			<p className="text-center">
+			<p className="text-center body-regular text-dark100_light900">
 				Don&apos;t have an account?{" "}
 				<Link
 					href={"/auth/register"}
-					className="text-blue-500 font-semibold"
+					className="text-primary-500 body-semibold"
 				>
 					Register
 				</Link>

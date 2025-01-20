@@ -1,5 +1,19 @@
-import { NavLink } from "@/types";
-import { CircleUserRound, House, UsersRound, Video } from "lucide-react";
+import { NavLink, Theme } from "@/types";
+import {
+	CircleUserRound,
+	Computer,
+	House,
+	Moon,
+	Sun,
+	UsersRound,
+	Video,
+} from "lucide-react";
+
+export const themes: Theme[] = [
+	{ value: "light", label: "Light", icon: Sun },
+	{ value: "dark", label: "Dark", icon: Moon },
+	{ value: "system", label: "System", icon: Computer },
+];
 
 export const navLinks: NavLink[] = [
 	{
