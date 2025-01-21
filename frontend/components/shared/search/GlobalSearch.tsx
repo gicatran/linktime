@@ -6,8 +6,8 @@ import React from "react";
 
 const GlobalSearch = () => {
 	return (
-		<Button variant={"ghost"}>
-			<Search />
+		<Button variant={"ghost"} className="w-fit h-fit">
+			<Search className="w-5 h-5 text-dark100_light900" />
 		</Button>
 	);
 };

@@ -1,7 +1,6 @@
 import ResetPasswordForm from "@/components/forms/ResetPasswordForm";
 import { Separator } from "@/components/ui/separator";
 import { cookies } from "next/headers";
-import Link from "next/link";
 import { redirect } from "next/navigation";
 import React from "react";
 
@@ -15,28 +14,15 @@ const ResetPasswordPage = async () => {
 
 	return (
 		<>
-			<h1 className="title">Choose a new password</h1>
-			<p className="subtitle">
+			<h1 className="h1-bold text-dark100_light900">
+				Choose a new password
+			</h1>
+			<p className="base-medium text-dark500_light500">
 				Enter your new password to complete the password reset process.
 			</p>
 			<Separator className="my-6" />
 			<ResetPasswordForm email={savedEmail!} />
 			<Separator className="my-6" />
-			<p className="text-center">
-				<Link
-					href={"/auth/login"}
-					className="text-blue-500 font-semibold"
-				>
-					Login
-				</Link>
-				{" | "}
-				<Link
-					href={"/auth/register"}
-					className="text-blue-500 font-semibold"
-				>
-					Register
-				</Link>
-			</p>
 		</>
 	);
 };

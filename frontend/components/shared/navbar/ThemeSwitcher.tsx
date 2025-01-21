@@ -16,16 +16,16 @@ const ThemeSwitcher = () => {
 	const { mode, setMode } = useTheme();
 
 	return (
-		<Menubar>
+		<Menubar className="border-none px-0">
 			<MenubarMenu>
-				<MenubarTrigger>
+				<MenubarTrigger className="cursor-pointer">
 					{mode === "light" ? (
-						<Sun className="w-5 h-5" />
+						<Sun className="w-5 h-5 text-dark100_light900" />
 					) : (
-						<Moon className="w-5 h-5" />
+						<Moon className="w-5 h-5 text-dark100_light900" />
 					)}
 				</MenubarTrigger>
-				<MenubarContent className="absolute right-[-3rem] min-w-[120px] rounded border">
+				<MenubarContent className="absolute right-[-3rem] min-w-[120px] rounded light-border-2 background-light900_dark200">
 					{themes.map((theme) => (
 						<MenubarItem
 							key={theme.value}
@@ -42,12 +42,16 @@ const ThemeSwitcher = () => {
 						>
 							<theme.icon
 								className={`w-4 h-4 ${
-									mode === theme.value && "active-theme"
+									mode === theme.value
+										? "active-theme"
+										: "text-dark100_light900"
 								}`}
 							/>
 							<p
 								className={`body-semibold ${
-									mode === theme.value ? "" : ""
+									mode === theme.value
+										? "active-theme"
+										: "text-dark100_light900"
 								}`}
 							>
 								{theme.label}

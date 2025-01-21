@@ -3,7 +3,7 @@ import React, { PropsWithChildren } from "react";
 
 const RootLayout = ({ children }: PropsWithChildren) => {
 	return (
-		<div>
+		<div className="h-screen flex flex-col background-light850_dark100">
 			<Navbar />
 			{children}
 		</div>

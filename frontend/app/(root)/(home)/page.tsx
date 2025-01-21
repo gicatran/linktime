@@ -42,10 +42,10 @@ const HomePage = () => {
 	];
 
 	return (
-		<div className="px-[10%] py-10 bg-slate-200">
+		<div className="px-[10%] py-10">
 			<div className="flex gap-10">
-				<div className="flex flex-col p-3 bg-white rounded min-w-72 gap-3">
-					<h1 className="font-bold">Blog</h1>
+				<div className="flex flex-col p-3 background-light900_dark200 rounded min-w-72 gap-3">
+					<h1 className="h2-bold text-dark100_light900">Blog</h1>
 					{blogPosts.map((blogPost) => {
 						return (
 							<div
@@ -55,13 +55,13 @@ const HomePage = () => {
 								<Image
 									src={blogPost.img}
 									alt="img"
-									className="w-16 h-16 rounded"
+									className="w-16 h-16 rounded border light-border-2"
 								/>
 								<div className="flex flex-col">
-									<p className="font-semibold">
+									<p className="paragraph-semibold text-dark100_light900">
 										{blogPost.title}
 									</p>
-									<p className="font-thin text-gray-400">
+									<p className="body-regular text-dark500_light500">
 										{blogPost.date}
 									</p>
 								</div>
