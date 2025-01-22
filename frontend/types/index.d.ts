@@ -5,6 +5,12 @@ type NavLink = {
 	icon: LucideIcon;
 };
 
+type SidebarLink = {
+	link: string;
+	icon: LucideIcon;
+	label: string;
+};
+
 type Theme = {
 	value: "light" | "dark" | "system";
 	label: string;

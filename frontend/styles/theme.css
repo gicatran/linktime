@@ -179,10 +179,6 @@
 		@apply placeholder:text-light-400 dark:placeholder:text-light-500;
 	}
 
-	.invert-colors {
-		@apply invert dark:invert-0;
-	}
-
 	.shadow-light100_dark100 {
 		@apply shadow-light-100 dark:shadow-dark-100;
 	}

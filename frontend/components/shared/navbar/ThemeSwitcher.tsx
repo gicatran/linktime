@@ -25,7 +25,7 @@ const ThemeSwitcher = () => {
 						<Moon className="w-5 h-5 text-dark100_light900" />
 					)}
 				</MenubarTrigger>
-				<MenubarContent className="absolute right-[-3rem] min-w-[120px] rounded light-border-2 background-light900_dark200">
+				<MenubarContent className="absolute right-[-3rem] min-w-[120px]">
 					{themes.map((theme) => (
 						<MenubarItem
 							key={theme.value}

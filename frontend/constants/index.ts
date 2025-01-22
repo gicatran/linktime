@@ -1,9 +1,14 @@
-import { NavLink, Theme } from "@/types";
+import { NavLink, SidebarLink, Theme } from "@/types";
 import {
+	Bookmark,
+	ChartSpline,
 	CircleUserRound,
 	Computer,
+	Handshake,
 	House,
+	Mail,
 	Moon,
+	Settings,
 	Sun,
 	UsersRound,
 	Video,
@@ -25,11 +30,49 @@ export const navLinks: NavLink[] = [
 		icon: CircleUserRound,
 	},
 	{
-		link: "/browse/groups",
+		link: "/groups",
 		icon: UsersRound,
 	},
 	{
-		link: "/browse/videos",
+		link: "/videos",
 		icon: Video,
+	},
+];
+
+export const sidebarLinks: SidebarLink[] = [
+	{
+		link: "/profile/analytics",
+		icon: ChartSpline,
+		label: "Analytics",
+	},
+	{
+		link: "/messages",
+		icon: Mail,
+		label: "Messages",
+	},
+	{
+		link: "/friends",
+		icon: Handshake,
+		label: "Friends",
+	},
+	{
+		link: "/groups",
+		icon: UsersRound,
+		label: "Groups",
+	},
+	{
+		link: "/videos",
+		icon: Video,
+		label: "Videos",
+	},
+	{
+		link: "/saved",
+		icon: Bookmark,
+		label: "Saved",
+	},
+	{
+		link: "/settings",
+		icon: Settings,
+		label: "Settings",
 	},
 ];
