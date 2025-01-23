@@ -4,11 +4,16 @@ import { cn } from "@/lib/utils";
 import { Eye, EyeOff, LucideIcon } from "lucide-react";
 
 interface InputProps extends React.ComponentProps<"input"> {
+	containerClassName?: string;
+	iconClassName?: string;
 	Icon?: LucideIcon;
 }
 
 const Input = React.forwardRef<HTMLInputElement, InputProps>(
-	({ className, type, Icon, ...props }, ref) => {
+	(
+		{ className, type, containerClassName, iconClassName, Icon, ...props },
+		ref
+	) => {
 		const [inputType, setInputType] = React.useState(type);
 
 		const togglePasswordVisibility = () => {
@@ -16,8 +21,14 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
 		};
 
 		return (
-			<div className="flex items-center px-3 py-2 gap-2 border light-border-2 rounded-md">
-				{Icon && <Icon className="text-dark500_light500" />}
+			<div
+				className={`flex items-center px-3 py-2 gap-2 border light-border-2 rounded-md ${containerClassName}`}
+			>
+				{Icon && (
+					<Icon
+						className={`text-dark500_light500 ${iconClassName}`}
+					/>
+				)}
 				<input
 					type={inputType}
 					className={cn(

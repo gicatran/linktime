@@ -1,14 +1,27 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import { Search } from "lucide-react";
 import React from "react";
 
 const GlobalSearch = () => {
 	return (
-		<Button variant={"ghost"} className="w-fit h-fit">
-			<Search className="w-5 h-5 text-dark100_light900" />
-		</Button>
+		<>
+			<div className="relative w-full max-w-56 max-xl:hidden">
+				<Input
+					type="text"
+					placeholder="Search globally"
+					defaultValue=""
+					className="paragraph-regular no-focus text-dark400_light700"
+					containerClassName="background-light800_darkgradient border-0 relative grow rounded-xl"
+					iconClassName="cursor-pointer"
+					Icon={Search}
+				/>
+			</div>
+			<div className="flex items-center justify-center cursor-pointer p-2 rounded-full background-light800_darkgradient xl:hidden">
+				<Search className="w-5 h-5 text-dark400_light700" />
+			</div>
+		</>
 	);
 };
 

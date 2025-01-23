@@ -1,4 +1,4 @@
-import { NavLink, SidebarLink, Theme } from "@/types";
+import { NavLink, SidebarGroup, Theme } from "@/types";
 import {
 	Bookmark,
 	ChartSpline,
@@ -26,7 +26,7 @@ export const navLinks: NavLink[] = [
 		icon: House,
 	},
 	{
-		link: "/browse/users",
+		link: "/users",
 		icon: CircleUserRound,
 	},
 	{
@@ -39,40 +39,60 @@ export const navLinks: NavLink[] = [
 	},
 ];
 
-export const sidebarLinks: SidebarLink[] = [
+export const sidebarGroups: SidebarGroup[] = [
 	{
-		link: "/profile/analytics",
-		icon: ChartSpline,
-		label: "Analytics",
+		label: "Personal",
+		links: [
+			{
+				link: "/profile/analytics",
+				icon: ChartSpline,
+				label: "Analytics",
+			},
+			{
+				link: "/messages",
+				icon: Mail,
+				label: "Messages",
+			},
+		],
 	},
 	{
-		link: "/messages",
-		icon: Mail,
-		label: "Messages",
+		label: "Community",
+		links: [
+			{
+				link: "/friends",
+				icon: Handshake,
+				label: "Friends",
+			},
+			{
+				link: "/groups",
+				icon: UsersRound,
+				label: "Groups",
+			},
+			{
+				link: "/videos",
+				icon: Video,
+				label: "Videos",
+			},
+		],
 	},
 	{
-		link: "/friends",
-		icon: Handshake,
-		label: "Friends",
+		label: "Media",
+		links: [
+			{
+				link: "/saved",
+				icon: Bookmark,
+				label: "Saved",
+			},
+		],
 	},
 	{
-		link: "/groups",
-		icon: UsersRound,
-		label: "Groups",
-	},
-	{
-		link: "/videos",
-		icon: Video,
-		label: "Videos",
-	},
-	{
-		link: "/saved",
-		icon: Bookmark,
-		label: "Saved",
-	},
-	{
-		link: "/settings",
-		icon: Settings,
-		label: "Settings",
+		label: "Other",
+		links: [
+			{
+				link: "/settings",
+				icon: Settings,
+				label: "Settings",
+			},
+		],
 	},
 ];
