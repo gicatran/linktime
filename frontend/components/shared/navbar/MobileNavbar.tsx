@@ -26,7 +26,7 @@ const NavContent = ({ user }: { user: UserInfo }) => {
 	return (
 		<section className="flex h-fit flex-col gap-3 py-8">
 			<Link
-				href="/profile"
+				href={`/${user.username}`}
 				className="text-dark300_light900 flex items-center justify-start gap-4 bg-transparent p-4 hover:background-light800_dark300 rounded-lg"
 			>
 				<Avatar className="h-8 w-8">

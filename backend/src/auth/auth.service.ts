@@ -18,6 +18,7 @@ import {
   ForgotPasswordCodeDto,
 } from 'src/account/dto/read-account.dto';
 import { ResetPasswordDto } from 'src/account/dto/update-account.dto';
+import { ReadUserDto } from 'src/user/dto/read-user.dto';
 
 @Injectable()
 export class AuthService {
@@ -175,8 +176,14 @@ export class AuthService {
     return await this.accountService.create(googleAccount);
   }
 
-  async getUserProfile(accountId: number) {
+  async getCurrentProfile(accountId: number) {
     const user = await this.userService.findByAccountId(accountId);
+    if (!user) throw new UnauthorizedException('User not found!');
+    return user;
+  }
+
+  async getUserProfile(readUserDto: ReadUserDto) {
+    const user = await this.userService.findByUsername(readUserDto.username);
     if (!user) throw new UnauthorizedException('User not found!');
     return user;
   }

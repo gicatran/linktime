@@ -1,6 +1,6 @@
 import React from "react";
 import Logo from "../Logo";
-import { getProfile } from "@/lib/actions/user.action";
+import { getCurrentProfile } from "@/lib/actions/user.action";
 import { Avatar, AvatarFallback, AvatarImage } from "../../ui/avatar";
 import { getAbbrName } from "@/lib/utils";
 import {
@@ -23,7 +23,7 @@ import { UserInfo } from "@/types";
 import NavLinks from "./NavLinks";
 
 const Navbar = async () => {
-	const user: UserInfo = await getProfile();
+	const user: UserInfo = await getCurrentProfile();
 
 	return (
 		<nav className="flex justify-between items-center px-[5%] h-14 background-light900_dark200 border-b light-border-2">
@@ -51,7 +51,7 @@ const Navbar = async () => {
 						<DropdownMenuLabel>{user.name}</DropdownMenuLabel>
 						<DropdownMenuSeparator />
 						<DropdownMenuItem>
-							<Link href="/profile">Profile</Link>
+							<Link href={`/${user.username}`}>Profile</Link>
 						</DropdownMenuItem>
 						<DropdownMenuSeparator />
 						<Button onClick={logout} className="w-full">

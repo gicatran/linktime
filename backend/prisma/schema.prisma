@@ -100,6 +100,7 @@ model users {
   updated_at                         DateTime        @default(now()) @db.Timestamp(6)
   account_id                         Int             @unique
   name                               String
+  cover_picture                      String?
   comment_likes                      comment_likes[]
   comments                           comments[]
   follows_follows_followee_idTousers follows[]       @relation("follows_followee_idTousers")

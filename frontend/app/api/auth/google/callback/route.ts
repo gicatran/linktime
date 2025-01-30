@@ -16,7 +16,7 @@ export async function GET(req: NextRequest) {
 
 	await createSession({
 		account: {
-			id: accountId,
+			id: Number.parseInt(accountId),
 			email: email,
 		},
 		accessToken,

@@ -199,11 +199,7 @@
 		);
 	}
 
-	.title {
-		@apply text-2xl font-bold my-1;
-	}
-
 	.subtitle {
-		@apply text-lg text-gray-500 my-1;
+		@apply text-gray-500;
 	}
 }

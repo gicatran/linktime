@@ -16,3 +16,7 @@ export function getAbbrName(name: string) {
 		.join(".")
 		.toUpperCase();
 }
+
+export function getYear(date: string) {
+	return new Date(date).getFullYear();
+}

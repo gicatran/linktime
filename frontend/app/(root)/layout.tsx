@@ -8,11 +8,7 @@ const RootLayout = ({ children }: PropsWithChildren) => {
 			<SidePanel />
 			<div className="flex flex-col w-full">
 				<Navbar />
-				<div className="flex justify-between h-full px-[5%] py-10 gap-8">
-					LeftSidebar
-					<div className="flex flex-col w-full">{children}</div>
-					RightSidebar
-				</div>
+				<div className="h-full px-[5%]">{children}</div>
 			</div>
 		</div>
 	);

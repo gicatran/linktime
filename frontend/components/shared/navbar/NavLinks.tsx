@@ -20,10 +20,10 @@ const NavLinks = () => {
 					<Link
 						key={navLink.link}
 						href={navLink.link}
-						className={`flex items-center justify-center aspect-square border-b-2 ${
+						className={`flex items-center justify-center aspect-square border-b-2 border-t-2 rounded-lg ${
 							isActive
-								? "border-b-primary-500"
-								: "border-light-900 dark:border-dark-200"
+								? "border-b-primary-500 border-t-light-900 dark:border-t-dark-200 rounded-none"
+								: "border-light-900 dark:border-dark-200 hover:background-light700_dark400"
 						}`}
 					>
 						<navLink.icon

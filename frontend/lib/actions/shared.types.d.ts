@@ -17,7 +17,7 @@ export interface LoginParams {
 
 export type Session = {
 	account: {
-		id: string;
+		id: number;
 		email: string;
 	};
 	accessToken: string;
