@@ -1,123 +1,97 @@
+@import url("../styles/theme.css");
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-@layer base {
-	:root {
-		--background: 0 0% 100%;
+body {
+	font-family: "Inter", sans-serif;
+}
 
-		--foreground: 0 0% 3.9%;
-
-		--card: 0 0% 100%;
-
-		--card-foreground: 0 0% 3.9%;
-
-		--popover: 0 0% 100%;
-
-		--popover-foreground: 0 0% 3.9%;
-
-		--primary: 0 0% 9%;
-
-		--primary-foreground: 0 0% 98%;
-
-		--secondary: 0 0% 96.1%;
-
-		--secondary-foreground: 0 0% 9%;
-
-		--muted: 0 0% 96.1%;
-
-		--muted-foreground: 0 0% 45.1%;
-
-		--accent: 0 0% 96.1%;
-
-		--accent-foreground: 0 0% 9%;
-
-		--destructive: 0 84.2% 60.2%;
-
-		--destructive-foreground: 0 0% 98%;
-
-		--border: 0 0% 89.8%;
-
-		--input: 0 0% 89.8%;
-
-		--ring: 0 0% 3.9%;
-
-		--chart-1: 12 76% 61%;
-
-		--chart-2: 173 58% 39%;
-
-		--chart-3: 197 37% 24%;
-
-		--chart-4: 43 74% 66%;
-
-		--chart-5: 27 87% 67%;
-
-		--radius: 0.5rem;
+@layer utilities {
+	.flex-center {
+		@apply flex justify-center items-center;
 	}
-	.dark {
-		--background: 0 0% 3.9%;
 
-		--foreground: 0 0% 98%;
+	.flex-between {
+		@apply flex justify-between items-center;
+	}
 
-		--card: 0 0% 3.9%;
+	.flex-start {
+		@apply flex justify-start items-center;
+	}
 
-		--card-foreground: 0 0% 98%;
+	.card-wrapper {
+		@apply bg-light-900 dark:dark-gradient shadow-light-100 dark:shadow-dark-100;
+	}
 
-		--popover: 0 0% 3.9%;
+	.btn {
+		@apply bg-light-800 dark:bg-dark-300 !important;
+	}
 
-		--popover-foreground: 0 0% 98%;
+	.btn-secondary {
+		@apply bg-light-800 dark:bg-dark-400 !important;
+	}
 
-		--primary: 0 0% 98%;
+	.btn-tertiary {
+		@apply bg-light-700 dark:bg-dark-300 !important;
+	}
 
-		--primary-foreground: 0 0% 9%;
+	.primary-gradient {
+		background: linear-gradient(129deg, #bf0055 0%, #da4387 100%);
+	}
 
-		--secondary: 0 0% 14.9%;
+	.dark-gradient {
+		background: linear-gradient(
+			232deg,
+			rgba(23, 28, 35, 0.41) 0%,
+			rgba(19, 22, 28, 0.7) 100%
+		);
+	}
 
-		--secondary-foreground: 0 0% 98%;
-
-		--muted: 0 0% 14.9%;
-
-		--muted-foreground: 0 0% 63.9%;
-
-		--accent: 0 0% 14.9%;
-
-		--accent-foreground: 0 0% 98%;
-
-		--destructive: 0 62.8% 30.6%;
-
-		--destructive-foreground: 0 0% 98%;
-
-		--border: 0 0% 14.9%;
-
-		--input: 0 0% 14.9%;
-
-		--ring: 0 0% 83.1%;
-
-		--chart-1: 220 70% 50%;
-
-		--chart-2: 160 60% 45%;
-
-		--chart-3: 30 80% 55%;
-
-		--chart-4: 280 65% 60%;
-
-		--chart-5: 340 75% 55%;
+	.tab {
+		@apply min-h-full dark:bg-dark-400 bg-light-800 text-light-500 dark:data-[state=active]:bg-dark-300 data-[state=active]:bg-primary-100 data-[state=active]:text-primary-500 !important;
 	}
 }
 
-@layer base {
-	* {
-		@apply border-border;
-	}
-	body {
-		@apply bg-background text-foreground;
-	}
+.no-focus {
+	@apply focus-visible:ring-0 focus-visible:ring-transparent focus-visible:ring-offset-0 !important;
 }
 
-.title {
-	@apply text-2xl font-bold my-1;
+.active-theme {
+	@apply text-[#bf0055] !important;
 }
 
-.subtitle {
-	@apply text-lg text-gray-500 my-1;
+.light-gradient {
+	background: linear-gradient(
+		132deg,
+		rgba(247, 249, 255, 0.5) 0%,
+		rgba(229, 237, 255, 0.25) 100%
+	);
+}
+
+.primary-text-gradient {
+	background: linear-gradient(129deg, #bf0055 0%, #da4387 100%);
+	background-clip: text;
+	-webkit-background-clip: text;
+	-webkit-text-fill-color: transparent;
+}
+
+.custom-scrollbar::-webkit-scrollbar {
+	width: 3px;
+	height: 3px;
+	border-radius: 2px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+	background: #ffffff;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+	background: #888;
+	border-radius: 50px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+	background: #555;
 }

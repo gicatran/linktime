@@ -13,8 +13,8 @@ const RegisterPage = async () => {
 
 	return (
 		<>
-			<h1 className="title">Create an account</h1>
-			<p className="subtitle">
+			<h1 className="h1-bold text-dark100_light900">Create an account</h1>
+			<p className="base-medium text-dark500_light500">
 				First time around? Select method to register and start explore!
 			</p>
 			<div className="flex justify-evenly items-center w-full mt-3">
@@ -23,11 +23,12 @@ const RegisterPage = async () => {
 			</div>
 			<Separator className="my-6" />
 			<RegisterForm />
-			<p className="my-5">
+			<Separator className="my-6" />
+			<p className="text-center body-regular text-dark100_light900">
 				Already have an account?{" "}
 				<Link
 					href={"/auth/login"}
-					className="text-blue-500 font-semibold"
+					className="text-primary-500 body-semibold"
 				>
 					Login
 				</Link>

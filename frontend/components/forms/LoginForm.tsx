@@ -98,7 +98,7 @@ const LoginForm = () => {
 				<div className="w-full flex justify-end items-center">
 					<Link
 						href={"/auth/forgot-password"}
-						className="text-blue-500 font-semibold"
+						className="text-primary-500 body-semibold"
 					>
 						Forgot Password?
 					</Link>

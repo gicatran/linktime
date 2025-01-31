@@ -4,11 +4,16 @@ import { cn } from "@/lib/utils";
 import { Eye, EyeOff, LucideIcon } from "lucide-react";
 
 interface InputProps extends React.ComponentProps<"input"> {
+	containerClassName?: string;
+	iconClassName?: string;
 	Icon?: LucideIcon;
 }
 
 const Input = React.forwardRef<HTMLInputElement, InputProps>(
-	({ className, type, Icon, ...props }, ref) => {
+	(
+		{ className, type, containerClassName, iconClassName, Icon, ...props },
+		ref
+	) => {
 		const [inputType, setInputType] = React.useState(type);
 
 		const togglePasswordVisibility = () => {
@@ -16,12 +21,18 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
 		};
 
 		return (
-			<div className="flex items-center px-3 py-2 gap-2 border border-input rounded-md">
-				{Icon && <Icon className="text-gray-500" />}
+			<div
+				className={`flex items-center px-3 py-2 gap-2 border light-border-2 rounded-md ${containerClassName}`}
+			>
+				{Icon && (
+					<Icon
+						className={`text-dark500_light500 ${iconClassName}`}
+					/>
+				)}
 				<input
 					type={inputType}
 					className={cn(
-						"flex rounded-none h-fit w-full border-none p-0 shadow-none bg-transparent text-base transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:ring-0 focus:outline-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm",
+						"flex rounded-none h-fit w-full border-none p-0 shadow-none bg-transparent paragraph-regular text-dark100_light900 transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-dark500_light500 focus-visible:ring-0 focus:outline-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm",
 						className
 					)}
 					ref={ref}
@@ -31,7 +42,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
 					<button
 						type="button"
 						onClick={togglePasswordVisibility}
-						className="text-gray-500 hover:text-gray-700"
+						className="text-dark500_light500 hover:text-dark100_light900"
 					>
 						{inputType === "password" ? (
 							<Eye className="h-5 w-5" />

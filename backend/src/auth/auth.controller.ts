@@ -2,7 +2,6 @@ import {
   Body,
   Controller,
   Get,
-  Logger,
   Post,
   Req,
   Request,
@@ -22,6 +21,7 @@ import {
   ForgotPasswordCodeDto,
 } from 'src/account/dto/read-account.dto';
 import { ResetPasswordDto } from 'src/account/dto/update-account.dto';
+import { ReadUserDto } from 'src/user/dto/read-user.dto';
 
 @Controller('auth')
 export class AuthController {
@@ -85,9 +85,14 @@ export class AuthController {
     return this.authService.refreshToken(req.user.id, req.user.email);
   }
 
-  @Get('profile')
-  getProfile(@Request() req) {
-    return this.authService.getUserProfile(req.user.id);
+  @Get('current-profile')
+  getCurrentProfile(@Request() req) {
+    return this.authService.getCurrentProfile(req.user.id);
+  }
+
+  @Post('profile')
+  getProfile(@Body() readUserDto: ReadUserDto) {
+    return this.authService.getUserProfile(readUserDto);
   }
 
   @Roles('admin')
