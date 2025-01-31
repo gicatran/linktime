@@ -1,8 +1,7 @@
 import RightSidebar from "@/components/shared/sidebar/RightSidebar";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { getSession } from "@/lib/actions/session.action";
 import { getProfileByUsername } from "@/lib/actions/user.action";
-import { getAbbrName, getYear } from "@/lib/utils";
+import { getAbbrName, getYear, isCurrentUser } from "@/lib/utils";
 import { UserInfo } from "@/types";
 import { Pencil, Plus } from "lucide-react";
 import Image from "next/image";
@@ -14,7 +13,6 @@ const ProfilePage = async ({
 }: {
 	params: Promise<{ username: string }>;
 }) => {
-	const session = await getSession();
 	const username = (await params).username;
 	const user: UserInfo = await getProfileByUsername(username);
 
@@ -68,7 +66,7 @@ const ProfilePage = async ({
 								@{user.username} • Joined{" "}
 								{getYear(user.created_at)}
 							</p>
-							{session?.account.id === user.account_id && (
+							{(await isCurrentUser(user.account_id)) && (
 								<div className="flex justify-end w-1/3 items-center gap-2">
 									<Link
 										href={`${user.username}/short/new`}
