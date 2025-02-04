@@ -2,6 +2,7 @@ import {
   ConflictException,
   Inject,
   Injectable,
+  Logger,
   UnauthorizedException,
 } from '@nestjs/common';
 import { CreateAccountDto } from '../account/dto/create-account.dto';
@@ -45,12 +46,13 @@ export class AuthService {
   }
 
   async login(accountId: number, email: string) {
-    const { accessToken, refreshToken } = await this.generateToken(accountId);
-    const hashedRefreshToken = await hash(refreshToken);
+    const { accessToken, refreshToken, hashedRefreshToken } =
+      await this.generateToken(accountId);
     await this.accountService.updateHashedRefreshToken(
       accountId,
       hashedRefreshToken,
     );
+
     return {
       id: accountId,
       email,
@@ -112,16 +114,18 @@ export class AuthService {
       this.jwtService.signAsync(payload),
       this.jwtService.signAsync(payload, this.refreshTokenConfig),
     ]);
+    const hashedRefreshToken = await hash(refreshToken);
 
     return {
       accessToken,
       refreshToken,
+      hashedRefreshToken,
     };
   }
 
   async refreshToken(accountId: number, email: string) {
-    const { accessToken, refreshToken } = await this.generateToken(accountId);
-    const hashedRefreshToken = await hash(refreshToken);
+    const { accessToken, refreshToken, hashedRefreshToken } =
+      await this.generateToken(accountId);
     await this.accountService.updateHashedRefreshToken(
       accountId,
       hashedRefreshToken,
@@ -176,14 +180,13 @@ export class AuthService {
     return await this.accountService.create(googleAccount);
   }
 
-  async getCurrentProfile(accountId: number) {
-    const user = await this.userService.findByAccountId(accountId);
-    if (!user) throw new UnauthorizedException('User not found!');
-    return user;
-  }
-
   async getUserProfile(readUserDto: ReadUserDto) {
-    const user = await this.userService.findByUsername(readUserDto.username);
+    let user = null;
+    if (readUserDto.id) {
+      user = await this.userService.findByAccountId(readUserDto.id);
+    } else {
+      user = await this.userService.findByUsername(readUserDto.username);
+    }
     if (!user) throw new UnauthorizedException('User not found!');
     return user;
   }

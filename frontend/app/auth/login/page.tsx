@@ -1,17 +1,16 @@
 import LoginForm from "@/components/forms/LoginForm";
 import OAuthButton from "@/components/shared/OAuthButton";
 import { Separator } from "@/components/ui/separator";
-import { getSession } from "@/lib/actions/session.action";
+import { Metadata } from "next";
 import Link from "next/link";
-import { redirect } from "next/navigation";
 import React from "react";
 
-const LoginPage = async () => {
-	const session = await getSession();
-	if (session && session.account) {
-		redirect("/");
-	}
+export const metadata: Metadata = {
+	title: "Login",
+	description: "Login to Linktime to start sharing your thoughts!",
+};
 
+const LoginPage = () => {
 	return (
 		<>
 			<h1 className="h1-bold text-dark100_light900">

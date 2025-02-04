@@ -1,4 +1,4 @@
-import { Injectable, Logger } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { compile } from 'handlebars';
 import { readFile } from 'node:fs/promises';
 import { createTransport, SendMailOptions, Transporter } from 'nodemailer';

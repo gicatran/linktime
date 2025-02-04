@@ -1,6 +1,6 @@
 import React from "react";
 import Logo from "../Logo";
-import { getCurrentProfile } from "@/lib/actions/user.action";
+import { getProfile } from "@/lib/actions/user.action";
 import { Avatar, AvatarFallback, AvatarImage } from "../../ui/avatar";
 import { getAbbrName } from "@/lib/utils";
 import {
@@ -21,9 +21,11 @@ import { Bell, Mail } from "lucide-react";
 import MobileNavbar from "./MobileNavbar";
 import { UserInfo } from "@/types";
 import NavLinks from "./NavLinks";
+import { getSession } from "@/lib/actions/session.action";
 
 const Navbar = async () => {
-	const user: UserInfo = await getCurrentProfile();
+	const session = await getSession();
+	const user: UserInfo = await getProfile({ id: session?.account.id });
 
 	return (
 		<nav className="flex justify-between items-center px-[5%] h-14 background-light900_dark200 border-b light-border-2">

@@ -2,6 +2,7 @@ import {
   Body,
   Controller,
   Get,
+  Logger,
   Post,
   Req,
   Request,
@@ -74,7 +75,7 @@ export class AuthController {
   async googleCallback(@Request() req, @Res() res: Response) {
     const response = await this.authService.login(req.user.id, req.user.email);
     res.redirect(
-      `${process.env.FRONTEND_URL}/api/auth/google/callback?accountId=${response.id}&email=${response.email}&accessToken=${response.accessToken}&refreshToken=${response.refreshToken}`,
+      `${process.env.FRONTEND_URL}/api/auth/oauth/google/callback?accountId=${response.id}&email=${response.email}&accessToken=${response.accessToken}&refreshToken=${response.refreshToken}`,
     );
   }
 
@@ -83,11 +84,6 @@ export class AuthController {
   @Post('refresh')
   refreshToken(@Request() req) {
     return this.authService.refreshToken(req.user.id, req.user.email);
-  }
-
-  @Get('current-profile')
-  getCurrentProfile(@Request() req) {
-    return this.authService.getCurrentProfile(req.user.id);
   }
 
   @Post('profile')

@@ -1,16 +1,15 @@
 import RegisterForm from "@/components/forms/RegisterForm";
 import OAuthButton from "@/components/shared/OAuthButton";
 import { Separator } from "@/components/ui/separator";
-import { getSession } from "@/lib/actions/session.action";
+import { Metadata } from "next";
 import Link from "next/link";
-import { redirect } from "next/navigation";
 
-const RegisterPage = async () => {
-	const session = await getSession();
-	if (session && session.account) {
-		redirect("/");
-	}
+export const metadata: Metadata = {
+	title: "Register",
+	description: "Create an account with Linktime to start exploring.",
+};
 
+const RegisterPage = () => {
 	return (
 		<>
 			<h1 className="h1-bold text-dark100_light900">Create an account</h1>

@@ -4,8 +4,9 @@ import { jwtVerify, SignJWT } from "jose";
 import { Session } from "./shared.types";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
+import { NextResponse } from "next/server";
 
-export async function createSession(params: Session) {
+export async function createSession(params: Session, response?: NextResponse) {
 	try {
 		const expiredAt = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000);
 		const encodedKey = new TextEncoder().encode(
@@ -17,6 +18,18 @@ export async function createSession(params: Session) {
 			.setIssuedAt()
 			.setExpirationTime(expiredAt)
 			.sign(encodedKey);
+
+		if (response) {
+			response.cookies.set("session", session, {
+				httpOnly: true,
+				secure: true,
+				expires: expiredAt,
+				sameSite: "lax",
+				path: "/",
+			});
+
+			return response;
+		}
 
 		(await cookies()).set("session", session, {
 			httpOnly: true,
@@ -61,63 +74,56 @@ export async function deleteSession() {
 	(await cookies()).delete("session");
 }
 
-export async function refreshToken(oldRefreshToken: string) {
-	try {
-		const response = await fetch(
-			`${process.env.NEXT_PUBLIC_BACKEND_URL}/auth/refresh`,
-			{
-				method: "POST",
-				headers: {
-					"Content-Type": "application/json",
-				},
-				body: JSON.stringify({
-					refresh: oldRefreshToken,
-				}),
-			}
-		);
-
-		if (!response.ok) {
-			throw new Error("Failed to refresh token!");
+export async function refreshToken({
+	sessionToken,
+	oldRefreshToken,
+	response,
+}: {
+	sessionToken: string;
+	oldRefreshToken: string;
+	response: NextResponse;
+}) {
+	const res = await fetch(
+		`${process.env.NEXT_PUBLIC_BACKEND_URL}/auth/refresh`,
+		{
+			method: "POST",
+			headers: {
+				"Content-Type": "application/json",
+			},
+			body: JSON.stringify({
+				refresh: oldRefreshToken,
+			}),
 		}
+	);
 
-		const { accessToken, refreshToken } = await response.json();
-
-		const updateRes = await fetch(
-			`${process.env.NEXT_PUBLIC_FRONTEND_URL}/api/auth/update`,
-			{
-				method: "POST",
-				body: JSON.stringify({
-					accessToken,
-					refreshToken,
-				}),
-			}
-		);
-
-		if (!updateRes.ok) {
-			throw new Error("Failed to update tokens!");
-		}
-
-		return accessToken;
-	} catch (error) {
-		console.error(error);
-		throw error;
+	if (!res.ok) {
+		throw new Error("Failed to refresh token!");
 	}
+
+	const { accessToken, refreshToken } = await res.json();
+
+	return await updateTokens({
+		sessionToken,
+		accessToken,
+		refreshToken,
+		response,
+	});
 }
 
 export async function updateTokens({
+	sessionToken,
 	accessToken,
 	refreshToken,
+	response,
 }: {
+	sessionToken: string;
 	accessToken: string;
 	refreshToken: string;
+	response: NextResponse;
 }) {
-	const cookie = (await cookies()).get("session")?.value;
 	const encodedKey = new TextEncoder().encode(process.env.SESSION_SECRET_KEY);
 
-	if (!cookie) return null;
-
-	const { payload } = await jwtVerify<Session>(cookie, encodedKey);
-
+	const { payload } = await jwtVerify<Session>(sessionToken, encodedKey);
 	if (!payload) throw new Error("Session not found!");
 
 	const newPayload: Session = {
@@ -128,5 +134,5 @@ export async function updateTokens({
 		refreshToken,
 	};
 
-	await createSession(newPayload);
+	return await createSession(newPayload, response);
 }

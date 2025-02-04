@@ -1,5 +1,11 @@
+import { Metadata } from "next";
 import Link from "next/link";
 import React, { PropsWithChildren } from "react";
+
+export const metadata: Metadata = {
+	title: "Forgot Password",
+	description: "Login to Linktime to start sharing your thoughts!",
+};
 
 const ForgotPasswordLayout = ({ children }: PropsWithChildren) => {
 	return (

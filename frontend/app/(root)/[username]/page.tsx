@@ -1,6 +1,6 @@
 import RightSidebar from "@/components/shared/sidebar/RightSidebar";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { getProfileByUsername } from "@/lib/actions/user.action";
+import { getProfile } from "@/lib/actions/user.action";
 import { getAbbrName, getYear, isCurrentUser } from "@/lib/utils";
 import { UserInfo } from "@/types";
 import { Pencil, Plus } from "lucide-react";
@@ -14,7 +14,7 @@ const ProfilePage = async ({
 	params: Promise<{ username: string }>;
 }) => {
 	const username = (await params).username;
-	const user: UserInfo = await getProfileByUsername(username);
+	const user: UserInfo = await getProfile({ username });
 
 	return (
 		<div className="flex gap-5">
