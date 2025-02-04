@@ -1,16 +1,25 @@
-import { NextRequest, NextResponse } from "next/server";
-import { getSession } from "./lib/actions/session.action";
+import { NextRequest } from "next/server";
+import { authMiddleware, defaultMiddleware } from "./middlewares/config";
 
-export default async function middleware(req: NextRequest) {
-	const session = await getSession();
+export default function middleware(req: NextRequest) {
+	const pathName = req.nextUrl.pathname;
 
-	if (!session || !session.account) {
-		return NextResponse.redirect(new URL("/auth/login", req.nextUrl));
+	if (pathName.startsWith("/auth")) {
+		return authMiddleware(req);
 	}
 
-	NextResponse.next();
+	return defaultMiddleware(req);
 }
 
 export const config = {
-	matcher: ["/", "/:username"],
+	matcher: [
+		/*
+		 * Match all request paths except for the ones starting with:
+		 * - api (API routes)
+		 * - _next/static (static files)
+		 * - _next/image (image optimization files)
+		 * - favicon.ico, sitemap.xml, robots.txt (metadata files)
+		 */
+		"/((?!api|_next/static|_next/image|favicon.ico|sitemap.xml|robots.txt).*)",
+	],
 };

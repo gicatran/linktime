@@ -23,6 +23,10 @@ export function getYear(date: string) {
 }
 
 export async function isCurrentUser(id: number) {
-    const session = await getSession();
-    return session?.account?.id === id;
+	const session = await getSession();
+	return session?.account?.id === id;
+}
+
+export function isTokenExpired(exp: number) {
+	return Date.now() >= exp * 1000;
 }

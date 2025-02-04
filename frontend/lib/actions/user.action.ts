@@ -1,21 +1,31 @@
 "use server";
 
-import { authFetch } from "./account.action";
+import { getSession } from "./session.action";
+import { FetchOptions } from "./shared.types";
 
-export async function getCurrentProfile() {
+export async function authFetch(url: string, options: FetchOptions = {}) {
 	try {
-		const response = await authFetch(
-			`${process.env.NEXT_PUBLIC_BACKEND_URL}/auth/current-profile`
-		);
-		const result = await response.json();
-		return result;
+		const session = await getSession();
+
+		options.headers = {
+			...options.headers,
+			Authorization: `Bearer ${session?.accessToken}`,
+		};
+
+		return await fetch(url, options);
 	} catch (error) {
 		console.error(error);
 		throw error;
 	}
 }
 
-export async function getProfileByUsername(username: string) {
+export async function getProfile({
+	id,
+	username,
+}: {
+	id?: number;
+	username?: string;
+}) {
 	try {
 		const response = await authFetch(
 			`${process.env.NEXT_PUBLIC_BACKEND_URL}/auth/profile`,
@@ -24,9 +34,10 @@ export async function getProfileByUsername(username: string) {
 				headers: {
 					"Content-Type": "application/json",
 				},
-				body: JSON.stringify({ username }),
+				body: JSON.stringify({ id, username }),
 			}
 		);
+
 		const result = await response.json();
 		return result;
 	} catch (error) {

@@ -17,10 +17,8 @@ import Link from "next/link";
 import { loginSchema } from "@/lib/validation";
 import { Button } from "../ui/button";
 import { login } from "@/lib/actions/account.action";
-import { useRouter } from "next/navigation";
 
 const LoginForm = () => {
-	const router = useRouter();
 	const [isSubmitting, setIsSubmitting] = useState(false);
 
 	const form = useForm<z.infer<typeof loginSchema>>({
@@ -46,8 +44,6 @@ const LoginForm = () => {
 					message: res.error.message,
 				});
 			}
-
-			router.push("/");
 		} catch (error) {
 			console.error(error);
 		} finally {

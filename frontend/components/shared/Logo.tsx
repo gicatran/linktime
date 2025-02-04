@@ -19,6 +19,7 @@ const Logo = ({
 				src={type === "icon" ? logoIcon : logoText}
 				alt="logo"
 				className={`object-contain flex justify-center items-center ${className}`}
+				priority
 			/>
 		</Link>
 	);
