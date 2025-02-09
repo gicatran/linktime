@@ -96,3 +96,30 @@ export const sidebarGroups: SidebarGroup[] = [
 		],
 	},
 ];
+
+export const profileLinks: NavLink[] = [
+	{
+		link: "/:username",
+		label: "Posts",
+	},
+	{
+		link: "/:username/about",
+		label: "About",
+	},
+	{
+		link: "/:username/friends",
+		label: "Friends",
+	},
+	{
+		link: "/:username/photos",
+		label: "Photos",
+	},
+	{
+		link: "/:username/videos",
+		label: "Videos",
+	},
+	{
+		link: "/:username/more",
+		label: "More",
+	},
+];

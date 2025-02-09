@@ -74,5 +74,8 @@ export default {
 	plugins: [
 		require("tailwindcss-animate"),
 		require("@tailwindcss/typography"),
+		function ({ addVariant }) {
+			addVariant("child", "& > *");
+		},
 	],
 } satisfies Config;

@@ -10,7 +10,9 @@ export class AccountService {
   async create(createAccountDto: CreateAccountDto) {
     const { password, ...account } = createAccountDto;
     const hashedPassword = await hash(password);
-    const profilePictureURL = `https://api.multiavatar.com/${account.username}.png`;
+    const profilePictureURL = account.profile_picture
+      ? account.profile_picture.replace(/s\d+-c/, `s300-c`)
+      : `${process.env.AVATAR_API_URL}/?name=${account.name}`;
 
     return await this.prisma.accounts.create({
       data: {
@@ -38,6 +40,14 @@ export class AccountService {
             },
           },
         ],
+      },
+    });
+  }
+
+  async findByEmail(email: string) {
+    return await this.prisma.accounts.findUnique({
+      where: {
+        email,
       },
     });
   }

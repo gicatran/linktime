@@ -30,7 +30,10 @@ const NavContent = ({ user }: { user: UserInfo }) => {
 				className="text-dark300_light900 flex items-center justify-start gap-4 bg-transparent p-4 hover:background-light800_dark300 rounded-lg"
 			>
 				<Avatar className="h-8 w-8">
-					<AvatarImage src={user.profile_picture} />
+					<AvatarImage
+						src={user.profile_picture}
+						referrerPolicy="no-referrer"
+					/>
 					<AvatarFallback>{getAbbrName(user.name)}</AvatarFallback>
 				</Avatar>
 				<p className="base-medium">{user.name}</p>

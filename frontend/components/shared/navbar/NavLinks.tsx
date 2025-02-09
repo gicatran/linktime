@@ -15,6 +15,7 @@ const NavLinks = () => {
 					(pathName.includes(navLink.link) &&
 						navLink.link.length > 1) ||
 					pathName == navLink.link;
+				const Icon = navLink.icon!;
 
 				return (
 					<Link
@@ -26,7 +27,7 @@ const NavLinks = () => {
 								: "border-light-900 dark:border-dark-200 hover:background-light700_dark400"
 						}`}
 					>
-						<navLink.icon
+						<Icon
 							className={
 								isActive
 									? "text-primary-500"

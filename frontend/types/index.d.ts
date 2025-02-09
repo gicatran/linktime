@@ -10,11 +10,14 @@ export type UserInfo = {
 	updated_at: string;
 	account_id: number;
 	name: string;
+	status: string;
+	role: "admin" | "user";
 };
 
 export type NavLink = {
 	link: string;
-	icon: LucideIcon;
+	label?: string;
+	icon?: LucideIcon;
 };
 
 type SidebarLink = {

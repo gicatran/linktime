@@ -66,7 +66,7 @@ export class AuthService {
   }
 
   async forgotPassword(forgotPasswordAccountDto: ForgotPasswordAccountDto) {
-    const account = await this.accountService.findByEmailOrUsername(
+    const account = await this.accountService.findByEmail(
       forgotPasswordAccountDto.email,
     );
     if (!account) throw new UnauthorizedException("Account doesn't exist!");
@@ -82,7 +82,7 @@ export class AuthService {
   }
 
   async forgotPasswordCode(forgotPasswordCodeDto: ForgotPasswordCodeDto) {
-    const account = await this.accountService.findByEmailOrUsername(
+    const account = await this.accountService.findByEmail(
       forgotPasswordCodeDto.email,
     );
     if (!account) throw new UnauthorizedException("Account doesn't exist!");
@@ -98,7 +98,7 @@ export class AuthService {
   }
 
   async resetPassword(resetPasswordDto: ResetPasswordDto) {
-    const account = await this.accountService.findByEmailOrUsername(
+    const account = await this.accountService.findByEmail(
       resetPasswordDto.email,
     );
     if (!account) throw new UnauthorizedException("Account doesn't exist!");
@@ -139,7 +139,7 @@ export class AuthService {
   }
 
   async validateLocalAccount(email: string, password: string) {
-    const account = await this.accountService.findByEmailOrUsername(email);
+    const account = await this.accountService.findByEmail(email);
     if (!account) throw new UnauthorizedException("Account doesn't exist!");
     const isPasswordMatched = await verify(account.password, password);
     if (!isPasswordMatched)
@@ -173,21 +173,23 @@ export class AuthService {
   }
 
   async validateGoogleAccount(googleAccount: CreateAccountDto) {
-    const account = await this.accountService.findByEmailOrUsername(
-      googleAccount.email,
-    );
+    Logger.log('Google Account: ', googleAccount);
+    const account = await this.accountService.findByEmail(googleAccount.email);
+    Logger.log('Existed Account: ', account);
     if (account) return account;
     return await this.accountService.create(googleAccount);
   }
 
   async getUserProfile(readUserDto: ReadUserDto) {
-    let user = null;
-    if (readUserDto.id) {
-      user = await this.userService.findByAccountId(readUserDto.id);
-    } else {
-      user = await this.userService.findByUsername(readUserDto.username);
-    }
+    const user = readUserDto.id
+      ? await this.userService.findByAccountId(readUserDto.id)
+      : await this.userService.findByUsername(readUserDto.username);
     if (!user) throw new UnauthorizedException('User not found!');
-    return user;
+    const account = await this.accountService.findOne(user.account_id);
+    return {
+      ...user,
+      status: account.status,
+      role: account.role,
+    };
   }
 }

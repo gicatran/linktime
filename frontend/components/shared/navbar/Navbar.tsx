@@ -41,15 +41,18 @@ const Navbar = async () => {
 				<Mail className="text-dark100_light900 w-5 h-5 mx-2" />
 				<Bell className="text-dark100_light900 w-5 h-5 mx-2" />
 				<DropdownMenu>
-					<DropdownMenuTrigger className="max-lg:hidden">
+					<DropdownMenuTrigger className="max-lg:hidden no-focus">
 						<Avatar>
-							<AvatarImage src={user.profile_picture} />
+							<AvatarImage
+								src={user.profile_picture}
+								referrerPolicy="no-referrer"
+							/>
 							<AvatarFallback>
 								{getAbbrName(user.name)}
 							</AvatarFallback>
 						</Avatar>
 					</DropdownMenuTrigger>
-					<DropdownMenuContent>
+					<DropdownMenuContent align="end">
 						<DropdownMenuLabel>{user.name}</DropdownMenuLabel>
 						<DropdownMenuSeparator />
 						<DropdownMenuItem>

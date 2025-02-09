@@ -5,6 +5,7 @@ declare global {
       DATABASE_URL: string;
 
       FRONTEND_URL: string;
+      AVATAR_API_URL: string;
 
       JWT_SECRET: string;
       JWT_EXPIRES_IN: string;

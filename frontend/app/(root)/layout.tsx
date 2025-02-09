@@ -8,7 +8,9 @@ const RootLayout = ({ children }: PropsWithChildren) => {
 			<SidePanel />
 			<div className="flex flex-col w-full">
 				<Navbar />
-				<div className="h-full px-[5%]">{children}</div>
+				<div className="h-full px-[5%] max-xl:px-0 max-xl:-m-px">
+					{children}
+				</div>
 			</div>
 		</div>
 	);
